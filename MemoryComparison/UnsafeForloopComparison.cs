@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MemoryComparison
 {
-    class UnsafeForloopComparison: IComparison
+    public class UnsafeForloopComparison: IComparison
     {
         public unsafe bool Compare(byte[]A, byte[]B)
         {

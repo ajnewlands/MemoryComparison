@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace MemoryComparison
 {
-    class MemcmpComparison: IComparison
+    public class MemcmpComparison: IComparison
     {
         public bool Compare(byte[]A, byte[]B)
         {

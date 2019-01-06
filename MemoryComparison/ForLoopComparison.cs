@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MemoryComparison
 {
-    class ForLoopComparison: IComparison
+    public class ForLoopComparison: IComparison
     {
         public bool Compare(byte[] A, byte[]B)
         {

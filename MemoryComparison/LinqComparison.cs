@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace MemoryComparison
 {
-    class LinqComparison: IComparison
+    public class LinqComparison: IComparison
     {
         public bool Compare(byte[] A, byte[] B)
         {
