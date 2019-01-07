@@ -86,4 +86,25 @@ namespace MemCmpTests
             Assert.AreEqual(false, new LinqComparison().Compare(A, B));
         }
     }
+
+    [TestClass]
+    public class ForInt64Tests
+    {
+        [TestMethod]
+        public void TestMatch()
+        {
+            byte[] A = new byte[8];
+            byte[] B = new byte[8];
+            Assert.AreEqual(true, new ForInt64Comparison().Compare(A, B));
+        }
+
+        [TestMethod]
+        public void TestMismatch()
+        {
+            byte[] A = new byte[8];
+            byte[] B = new byte[8];
+            B[7] = 1;
+            Assert.AreEqual(false, new ForInt64Comparison().Compare(A, B));
+        }
+    }
 }

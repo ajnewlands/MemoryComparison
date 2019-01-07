@@ -30,6 +30,7 @@ namespace MemoryComparison
             byte[] A = new byte[100000];
             byte[] B = new byte[100000];
 
+            RunTest(new ForInt64Comparison(), A, B, iterations);
             RunTest(new ForLoopComparison(), A, B, iterations);
             RunTest(new LinqComparison(), A, B, iterations);
             RunTest(new MemcmpComparison(), A, B, iterations);
