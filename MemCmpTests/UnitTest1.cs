@@ -93,17 +93,17 @@ namespace MemCmpTests
         [TestMethod]
         public void TestMatch()
         {
-            byte[] A = new byte[8];
-            byte[] B = new byte[8];
+            byte[] A = new byte[16];
+            byte[] B = new byte[16];
             Assert.AreEqual(true, new ForInt64Comparison().Compare(A, B));
         }
 
         [TestMethod]
         public void TestMismatch()
         {
-            byte[] A = new byte[8];
-            byte[] B = new byte[8];
-            B[7] = 1;
+            byte[] A = new byte[16];
+            byte[] B = new byte[16];
+            B[15] = 1;
             Assert.AreEqual(false, new ForInt64Comparison().Compare(A, B));
         }
     }

@@ -8,19 +8,25 @@ namespace MemoryComparison
 {
     public class ForInt64Comparison: IComparison
     {
-        // NB, implicitly assuming both arrays are the same length and the length is divisible by 8 (bytes)
+        // The fastest pure c# version so far...
         public unsafe bool Compare(byte[]A, byte[]B)
         {
-            var pA = Marshal.UnsafeAddrOfPinnedArrayElement<byte>(A, 0);
-            var pB = Marshal.UnsafeAddrOfPinnedArrayElement<byte>(B, 0);
-
-            for(int i = 0; i < A.Length; i = i + 8)
+            fixed( byte* pA = A, pB = B)
             {
+                long* lA = (long*)pA;
+                long* lB = (long*)pB;
 
-                if (Marshal.ReadInt64(pA) != Marshal.ReadInt64(pB))
-                    return false;
+                for (int i = 0; i < A.Length/8; i++)
+                {
+                    long a = lA[i];
+                    long b = lB[i];
+
+                    if (a != b)
+                        return false;
+                }
+                return true;
             }
-            return true;
         }
+
     }
 }
