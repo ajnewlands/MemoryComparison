@@ -1,42 +1,56 @@
 ﻿using System;
-using System.Diagnostics;
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
 
 namespace MemoryComparison
 {
-    class Program
+    public class MemoryComparison
     {
-        static long RunTest(IComparison implementation, byte[]A, byte[] B, uint iterations)
-        {
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-            for(uint i = 0; i < iterations; i++)
-            {
-                var b = implementation.Compare(A, B);
-                if(!b)
-                {
-                    Console.WriteLine($"Failure in {implementation.GetType()}");
-                    break;
-                }
-            }
-            stopwatch.Stop();
-            Console.WriteLine($"{implementation.GetType()} took {(stopwatch.ElapsedTicks / (Decimal)Stopwatch.Frequency).ToString("F")} seconds");
+        SpanComparison span = new SpanComparison();
+        ForInt64Comparison forInt64 = new ForInt64Comparison();
+        ForLoopComparison forLoop = new ForLoopComparison();
+        LinqComparison linq = new LinqComparison();
+        MemcmpComparison memcmp = new MemcmpComparison();
+        UnsafeForloopComparison unsafeforLoop = new UnsafeForloopComparison();
 
-            return stopwatch.ElapsedTicks;
+        byte[] A;
+        byte[] B;
+
+        [Params(1000000)]
+        public int N;
+
+        [GlobalSetup]
+        public void Setup()
+        {
+            A = new byte[N];
+            B = new byte[N];
         }
 
+        [Benchmark]
+        public void Span() => span.Compare(A, B);
+
+        [Benchmark]
+        public void Memcmp() => memcmp.Compare(A, B);
+
+        [Benchmark]
+        public void ForInt64() => forInt64.Compare(A, B);
+
+        [Benchmark]
+        public void ForLoop() => forLoop.Compare(A, B);
+
+        [Benchmark]
+        public void Linq() => linq.Compare(A, B);
+
+        [Benchmark]
+        public void UnsafeForLoop() => unsafeforLoop.Compare(A, B);
+           
+    }
+
+    class Program
+    {
         static void Main(string[] args)
         {
-            uint iterations = 100000;
-            byte[] A = new byte[100000];
-            byte[] B = new byte[100000];
-
-            RunTest(new ForInt64Comparison(), A, B, iterations);
-            RunTest(new ForLoopComparison(), A, B, iterations);
-            RunTest(new LinqComparison(), A, B, iterations);
-            RunTest(new MemcmpComparison(), A, B, iterations);
-            RunTest(new UnsafeForloopComparison(), A, B, iterations);
-
-
+            var summary = BenchmarkRunner.Run<MemoryComparison>();
             Console.WriteLine("Press any key to exit");
             Console.ReadKey();
         }
